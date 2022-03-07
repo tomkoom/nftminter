@@ -1,0 +1,35 @@
+{
+  "canisters": {
+    "nftminter": {
+      "main": "src/nftminter/main.mo",
+      "type": "motoko"
+    },
+    "nftminter_assets": {
+      "dependencies": [
+        "nftminter"
+      ],
+      "frontend": {
+        "entrypoint": "src/nftminter_assets/src/index.html"
+      },
+      "source": [
+        "src/nftminter_assets/assets",
+        "dist/nftminter_assets/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "dfx": "0.8.0",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
