@@ -11,4 +11,5 @@ type Entry =
 service : {
   insert: (Name, text, text, text, Phone) -> ();
   lookup: (Name) -> (opt Entry) query;
+  whoami: () -> (principal) query;
 }

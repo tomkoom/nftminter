@@ -1,7 +1,15 @@
 import AssocList "mo:base/AssocList";
 import List "mo:base/List";
 
-actor Contact {
+actor NFTMINTER {
+
+  // whoami
+  public shared query (msg) func whoami() : async Principal {
+    msg.caller;
+  };
+
+
+  // –––
 
   var contacts : ContactsMap = List.nil();
 

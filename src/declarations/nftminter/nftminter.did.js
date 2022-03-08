@@ -11,6 +11,7 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'insert' : IDL.Func([Name, IDL.Text, IDL.Text, IDL.Text, Phone], [], []),
     'lookup' : IDL.Func([Name], [IDL.Opt(Entry)], ['query']),
+    'whoami' : IDL.Func([], [IDL.Principal], ['query']),
   });
 };
 export const init = ({ IDL }) => { return []; };

@@ -17,4 +17,5 @@ export interface _SERVICE {
       arg_4: Phone,
     ) => Promise<undefined>,
   'lookup' : (arg_0: Name) => Promise<[] | [Entry]>,
+  'whoami' : () => Promise<Principal>,
 }
