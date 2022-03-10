@@ -1,15 +1,15 @@
-type Phone = nat;
-type Name = text;
-type Entry = 
- record {
-   address1: text;
-   address2: text;
-   email: text;
-   name: Name;
-   phone: Phone;
- };
+type TokenId = nat;
 service : {
-  insert: (Name, text, text, text, Phone) -> ();
-  lookup: (Name) -> (opt Entry) query;
-  whoami: () -> (principal) query;
+  approve: (principal, TokenId) -> ();
+  balanceOf: (principal) -> (opt nat);
+  getApproved: (nat) -> (principal);
+  isApprovedForAll: (principal, principal) -> (bool);
+  mint: (text) -> (nat);
+  mint_principal: (text, principal) -> (nat);
+  name: () -> (text) query;
+  ownerOf: (TokenId) -> (opt principal);
+  setApprovalForAll: (principal, bool) -> () oneway;
+  symbol: () -> (text) query;
+  tokenURI: (TokenId) -> (opt text) query;
+  transferFrom: (principal, principal, nat) -> () oneway;
 }

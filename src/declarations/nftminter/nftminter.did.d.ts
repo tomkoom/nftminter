@@ -1,21 +1,22 @@
 import type { Principal } from '@dfinity/principal';
-export interface Entry {
-  'name' : Name,
-  'email' : string,
-  'phone' : Phone,
-  'address1' : string,
-  'address2' : string,
-}
-export type Name = string;
-export type Phone = bigint;
+export type TokenId = bigint;
 export interface _SERVICE {
-  'insert' : (
-      arg_0: Name,
-      arg_1: string,
-      arg_2: string,
-      arg_3: string,
-      arg_4: Phone,
+  'approve' : (arg_0: Principal, arg_1: TokenId) => Promise<undefined>,
+  'balanceOf' : (arg_0: Principal) => Promise<[] | [bigint]>,
+  'getApproved' : (arg_0: bigint) => Promise<Principal>,
+  'isApprovedForAll' : (arg_0: Principal, arg_1: Principal) => Promise<boolean>,
+  'mint' : (arg_0: string) => Promise<bigint>,
+  'mint_principal' : (arg_0: string, arg_1: Principal) => Promise<bigint>,
+  'name' : () => Promise<string>,
+  'ownerOf' : (arg_0: TokenId) => Promise<[] | [Principal]>,
+  'setApprovalForAll' : (arg_0: Principal, arg_1: boolean) => Promise<
+      undefined
+    >,
+  'symbol' : () => Promise<string>,
+  'tokenURI' : (arg_0: TokenId) => Promise<[] | [string]>,
+  'transferFrom' : (
+      arg_0: Principal,
+      arg_1: Principal,
+      arg_2: bigint,
     ) => Promise<undefined>,
-  'lookup' : (arg_0: Name) => Promise<[] | [Entry]>,
-  'whoami' : () => Promise<Principal>,
 }

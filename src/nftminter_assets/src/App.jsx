@@ -1,9 +1,7 @@
 import React from "react";
 
 // components
-import Contacts from "./Contacts";
-import PlugSignIn from "./PlugSignIn";
-import WhoAmI from "./WhoAmI";
+import Plug from "./Plug";
 
 const App = ({ nftminter }) => {
 	return (
@@ -14,11 +12,8 @@ const App = ({ nftminter }) => {
 				<a href="https://github.com/motoko-bootcamp/bootcamp" rel="noreferrer noopener" target="_blank">
 					Motoko Bootcamp
 				</a>
-				.
 			</p>
-			<WhoAmI nftminter={nftminter} />
-			{/* <Contacts nftminter={nftminter} /> */}
-			<PlugSignIn nftminter={nftminter} />
+			<Plug nftminter={nftminter} />
 		</div>
 	);
 };
