@@ -13,9 +13,14 @@ const Plug = ({ nftminter }) => {
 	const [plugActor, setPlugActor] = useState(undefined);
 	const [plugUserPrincipal, setPlugUserPrincipal] = useState(undefined);
 	const [motokoBootcampTokenBalance, setMotokoBootcampTokenBalance] = useState(undefined);
+	const [whoAmI, setWhoAmI] = useState();
+
+	// idl
+	const nftminterIdl = idlFactory;
+	const nftminterCanisterId = canisterId;
 
 	// plug
-	const whitelist = [canisterId];
+	const whitelist = [nftminterCanisterId];
 	const host = "https://mainnet.dfinity.network";
 
 	const connectToPlug = async () => {
@@ -25,20 +30,20 @@ const Plug = ({ nftminter }) => {
 				whitelist,
 				host,
 			});
-			console.log(`The connected user's public key is:`, publicKey);
+			// console.log(`The connected user's public key is:`, publicKey);
 			setIsConnected(await window.ic.plug.isConnected());
 		}
 
 		// create actor
 		const actor = await window.ic.plug.createActor({
-			canisterId: canisterId,
-			interfaceFactory: idlFactory,
+			canisterId: nftminterCanisterId,
+			interfaceFactory: nftminterIdl,
 		});
 		setPlugActor(actor);
 
 		// create agent
-		const agent = window.ic.plug.createAgent({ whitelist, host });
-		setPlugAgent(agent);
+		// const agent = window.ic.plug.createAgent({ whitelist, host });
+		// setPlugAgent(agent);
 
 		// get principal id
 		const principalId = await window.ic.plug.agent.getPrincipal();
@@ -53,33 +58,40 @@ const Plug = ({ nftminter }) => {
 	}, [plugUserPrincipal]);
 
 	// get motoko bootcamp tokens balance
-	const ic_agent = new HttpAgent({ host });
-	let readActorCache = {};
+	// const ic_agent = new HttpAgent({ host });
+	// let readActorCache = {};
 
-	function readActor(canId, idl) {
-		if (canId in readActorCache) {
-			readActorCache[canId];
-		}
-		const actor = Actor.createActor(idl, {
-			agent: ic_agent,
-			canisterId: canId,
-		});
+	// function readActor(canId, idl) {
+	// 	if (canId in readActorCache) {
+	// 		readActorCache[canId];
+	// 	}
+	// 	const actor = Actor.createActor(idl, {
+	// 		agent: ic_agent,
+	// 		canisterId: canId,
+	// 	});
 
-		readActorCache[canId] = actor;
-		return actor;
-	}
+	// 	readActorCache[canId] = actor;
+	// 	return actor;
+	// }
 
 	async function getMotokoBootcampTokenBalance() {
-		const ledger = readActor("yeeiw-3qaaa-aaaah-qcvmq-cai", ledger_idl);
+		// const ledger = readActor("yeeiw-3qaaa-aaaah-qcvmq-cai", ledger_idl);
+
+		const ledger = Actor.createActor(ledger_idl, {
+			agent: new HttpAgent({ host }),
+			canisterId: "yeeiw-3qaaa-aaaah-qcvmq-cai", // faucet canister
+		});
 		const account = getAccountIdentifier(plugUserPrincipal);
 		const balance = await ledger.account_balance_dfx({ account });
-		// const resBalance = parseInt(balance.e8s) / 100_000_000;
-
 		// serialize bigInt
 		const serialized = JSON.stringify(balance, (key, value) =>
 			typeof value === "bigint" ? value.toString() + "n" : value
 		);
 		setMotokoBootcampTokenBalance(serialized);
+	}
+
+	async function getWhoAmI() {
+		setWhoAmI(await plugActor.whoami());
 	}
 
 	return (
@@ -91,14 +103,18 @@ const Plug = ({ nftminter }) => {
 				Disconnect
 			</button> */}
 			<p>Connection status: {isConnected.toString()}</p>
-			<p>Principal Id: {String(plugUserPrincipal)}</p>
-			{/* <button onClick={isConnected ? () => getMotokoBootcampTokenBalance() : null}>
-				Get Motoko Bootcamp Token Balance
-			</button> */}
+			<p>Plug Principal Id: {String(plugUserPrincipal)}</p>
 			<p>Bootcamp token balance: {String(motokoBootcampTokenBalance)}</p>
-			<a href="https://bootcamp-faucet.vercel.app/" rel="noreferrer noopener" target="_blank">
+			<a
+				href="https://bootcamp-faucet.vercel.app/"
+				rel="noreferrer noopener"
+				target="_blank"
+				style={{ display: "block", marginBottom: "1rem" }}
+			>
 				Token Faucet →
 			</a>
+			<button onClick={() => getWhoAmI()}>Request canister who am I</button>
+			<p>Your Plug Principal Id is {whoAmI}</p>
 		</div>
 	);
 };

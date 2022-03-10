@@ -12,4 +12,5 @@ service : {
   symbol: () -> (text) query;
   tokenURI: (TokenId) -> (opt text) query;
   transferFrom: (principal, principal, nat) -> () oneway;
+  whoami: () -> (text) query;
 }

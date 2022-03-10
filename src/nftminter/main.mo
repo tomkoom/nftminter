@@ -13,12 +13,24 @@ import T "dip721_types";
 
 actor Dip721Nft {
 
+    // whoami
+    // public shared query (msg) func whoami() : async Principal {
+    //     msg.caller;
+    // };
+
+    public shared query (msg) func whoami() : async Text {
+        // get default identity
+        let principal : Text = Principal.toText(msg.caller);
+        return principal;
+    };
+
+
     //Using DIP721 standard, adapted from https://github.com/SuddenlyHazel/DIP721/blob/main/src/DIP721/DIP721.mo
 
     private stable var tokenPk : Nat = 0;
 
     // nft name and symbol
-    stable var _name : Text = "Test";
+    stable var _name : Text = "TestCollection";
     stable var _symbol : Text = "TST";
 
     // types

@@ -19,4 +19,5 @@ export interface _SERVICE {
       arg_1: Principal,
       arg_2: bigint,
     ) => Promise<undefined>,
+  'whoami' : () => Promise<string>,
 }

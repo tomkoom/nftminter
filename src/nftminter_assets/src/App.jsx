@@ -1,4 +1,5 @@
 import React from "react";
+import Mint from "./etc/Mint";
 
 // components
 import Plug from "./Plug";
@@ -14,6 +15,8 @@ const App = ({ nftminter }) => {
 				</a>
 			</p>
 			<Plug nftminter={nftminter} />
+			<br />
+			<Mint nftminter={nftminter} />
 		</div>
 	);
 };

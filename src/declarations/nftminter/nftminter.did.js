@@ -21,6 +21,7 @@ export const idlFactory = ({ IDL }) => {
         [],
         ['oneway'],
       ),
+    'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
 };
 export const init = ({ IDL }) => { return []; };
