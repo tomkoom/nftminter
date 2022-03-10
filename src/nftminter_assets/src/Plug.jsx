@@ -47,10 +47,10 @@ const Plug = ({ nftminter }) => {
 
 	// get balance
 	useEffect(() => {
-		if (isConnected) {
+		if (plugUserPrincipal) {
 			getMotokoBootcampTokenBalance();
 		}
-	}, [isConnected]);
+	}, [plugUserPrincipal]);
 
 	// get motoko bootcamp tokens balance
 	const ic_agent = new HttpAgent({ host });
@@ -87,19 +87,18 @@ const Plug = ({ nftminter }) => {
 			<button onClick={() => connectToPlug()} disabled={isConnected ? true : false}>
 				Sign in with Plug
 			</button>
-			<button onClick={() => window.ic.plug.disconnect()} disabled={isConnected ? false : true}>
+			{/* <button onClick={() => window.ic.plug.disconnect()} disabled={isConnected ? false : true}>
 				Disconnect
-			</button>
+			</button> */}
 			<p>Connection status: {isConnected.toString()}</p>
-			<p>Plug user principal: {String(plugUserPrincipal)}</p>
-			<button onClick={isConnected ? () => getMotokoBootcampTokenBalance() : null}>
+			<p>Principal Id: {String(plugUserPrincipal)}</p>
+			{/* <button onClick={isConnected ? () => getMotokoBootcampTokenBalance() : null}>
 				Get Motoko Bootcamp Token Balance
-			</button>
-			<p>Motoko Bootcamp token balance: {String(motokoBootcampTokenBalance)}</p>
+			</button> */}
+			<p>Bootcamp token balance: {String(motokoBootcampTokenBalance)}</p>
 			<a href="https://bootcamp-faucet.vercel.app/" rel="noreferrer noopener" target="_blank">
 				Token Faucet →
 			</a>
-			{/* <p>Plug agent: {JSON.stringify(plugAgent, null, 2)}</p> */}
 		</div>
 	);
 };
