@@ -1,22 +1,39 @@
-import React from "react";
-import Mint from "./etc/Mint";
+import React, { useState } from "react";
+import css from "./App.module.css";
+import Mint from "./Sections/Mint/Mint";
+import Hero from "./Sections/Hero/Hero";
+import "./App.css";
 
 // components
-import Plug from "./Plug";
+import Plug from "./Sections/Plug/Plug";
 
 const App = ({ nftminter }) => {
+	// state
+	const [isConnected, setIsConnected] = useState(false);
+	const [plugActor, setPlugActor] = useState(undefined);
+	const [plugUserPrincipal, setPlugUserPrincipal] = useState(undefined);
+	const [motokoBootcampTokenBalance, setMotokoBootcampTokenBalance] = useState(undefined);
+	const [whoAmI, setWhoAmI] = useState(undefined);
+
 	return (
-		<div>
-			<h1>App</h1>
-			<p>
-				Core project for the{" "}
-				<a href="https://github.com/motoko-bootcamp/bootcamp" rel="noreferrer noopener" target="_blank">
-					Motoko Bootcamp
-				</a>
-			</p>
-			<Plug nftminter={nftminter} />
-			<br />
-			<Mint nftminter={nftminter} />
+		<div className="app">
+			<Hero />
+			<div className="app__content">
+				<Plug
+					nftminter={nftminter}
+					isConnected={isConnected}
+					setIsConnected={setIsConnected}
+					plugActor={plugActor}
+					setPlugActor={setPlugActor}
+					plugUserPrincipal={plugUserPrincipal}
+					setPlugUserPrincipal={setPlugUserPrincipal}
+					motokoBootcampTokenBalance={motokoBootcampTokenBalance}
+					setMotokoBootcampTokenBalance={setMotokoBootcampTokenBalance}
+					whoAmI={whoAmI}
+					setWhoAmI={setWhoAmI}
+				/>
+				<Mint nftminter={nftminter} isConnected={isConnected} plugActor={plugActor} />
+			</div>
 		</div>
 	);
 };

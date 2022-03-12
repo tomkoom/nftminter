@@ -3,11 +3,12 @@ service : {
   approve: (principal, TokenId) -> ();
   balanceOf: (principal) -> (opt nat);
   getApproved: (nat) -> (principal);
+  getNumTokensMinted: () -> (nat) query;
   isApprovedForAll: (principal, principal) -> (bool);
   mint: (text) -> (nat);
   mint_principal: (text, principal) -> (nat);
   name: () -> (text) query;
-  ownerOf: (TokenId) -> (opt principal);
+  ownerOf: (TokenId) -> (text) query;
   setApprovalForAll: (principal, bool) -> () oneway;
   symbol: () -> (text) query;
   tokenURI: (TokenId) -> (opt text) query;

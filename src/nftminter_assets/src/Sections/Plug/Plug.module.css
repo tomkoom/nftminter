@@ -1,0 +1,18 @@
+.whoami {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
+	padding: 1rem;
+	box-shadow: 0 0 0 1px var(--coolGray20);
+}
+
+.plug__btn {
+	display: flex;
+	padding: 0.25rem 0.5rem;
+	cursor: pointer;
+	background: linear-gradient(94.95deg, #ffe701 -1.41%, #fa51d3 34.12%, #10d9ed 70.19%, #52ff53 101.95%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}

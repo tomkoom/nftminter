@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { canisterId, idlFactory } from "../../declarations/nftminter/index";
+import { canisterId, idlFactory } from "../../../../declarations/nftminter/index";
+import css from "./Plug.module.css";
 
 // for requesting motoko token balance from the faucet https://bootcamp-faucet.vercel.app/
 import { Actor, HttpAgent } from "@dfinity/agent";
-import ledger_idl from "./motoko-bootcamp-tokens-ledger.did";
-import { getAccountIdentifier } from "./utils";
+import ledger_idl from "../../motoko-bootcamp-tokens-ledger.did";
+import { getAccountIdentifier } from "../../utils";
 
-const Plug = ({ nftminter }) => {
-	// state
-	const [isConnected, setIsConnected] = useState(false);
-	const [plugAgent, setPlugAgent] = useState(undefined);
-	const [plugActor, setPlugActor] = useState(undefined);
-	const [plugUserPrincipal, setPlugUserPrincipal] = useState(undefined);
-	const [motokoBootcampTokenBalance, setMotokoBootcampTokenBalance] = useState(undefined);
-	const [whoAmI, setWhoAmI] = useState();
-
+const Plug = ({
+	nftminter,
+	isConnected,
+	setIsConnected,
+	plugActor,
+	setPlugActor,
+	plugUserPrincipal,
+	setPlugUserPrincipal,
+	motokoBootcampTokenBalance,
+	setMotokoBootcampTokenBalance,
+	whoAmI,
+	setWhoAmI,
+}) => {
 	// idl
 	const nftminterIdl = idlFactory;
 	const nftminterCanisterId = canisterId;
@@ -40,10 +45,6 @@ const Plug = ({ nftminter }) => {
 			interfaceFactory: nftminterIdl,
 		});
 		setPlugActor(actor);
-
-		// create agent
-		// const agent = window.ic.plug.createAgent({ whitelist, host });
-		// setPlugAgent(agent);
 
 		// get principal id
 		const principalId = await window.ic.plug.agent.getPrincipal();
@@ -95,16 +96,23 @@ const Plug = ({ nftminter }) => {
 	}
 
 	return (
-		<div>
-			<button onClick={() => connectToPlug()} disabled={isConnected ? true : false}>
+		<div className="section">
+			<button
+				className={!isConnected ? css.plug__btn : `${css.plug__btn} ${css.disabled}`}
+				disabled={isConnected ? true : false}
+				onClick={() => connectToPlug()}
+			>
 				Sign in with Plug
 			</button>
+
 			{/* <button onClick={() => window.ic.plug.disconnect()} disabled={isConnected ? false : true}>
 				Disconnect
 			</button> */}
-			<p>Connection status: {isConnected.toString()}</p>
-			<p>Plug Principal Id: {String(plugUserPrincipal)}</p>
-			<p>Bootcamp token balance: {String(motokoBootcampTokenBalance)}</p>
+			<p>Plug {!isConnected ? "is not connected ⚪" : "is connected 🟢"}</p>
+			<p>Your Plug Principal Id is </p>
+			<p>{String(plugUserPrincipal)}</p>
+			<p>Your Bootcamp token balance is </p>
+			<p>{String(motokoBootcampTokenBalance)}</p>
 			<a
 				href="https://bootcamp-faucet.vercel.app/"
 				rel="noreferrer noopener"
@@ -113,8 +121,11 @@ const Plug = ({ nftminter }) => {
 			>
 				Token Faucet →
 			</a>
-			<button onClick={() => getWhoAmI()}>Request canister who am I</button>
-			<p>Your Plug Principal Id is {whoAmI}</p>
+			<div className={css.whoami} style={{ display: isConnected ? null : "none" }}>
+				<button onClick={() => getWhoAmI()}>Query canister whoami</button>
+				<p>Your Principal Id is </p>
+				<p>{String(whoAmI)}</p>
+			</div>
 		</div>
 	);
 };

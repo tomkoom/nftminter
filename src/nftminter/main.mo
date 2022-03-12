@@ -13,61 +13,89 @@ import T "dip721_types";
 
 actor Dip721Nft {
 
-    // whoami
-    // public shared query (msg) func whoami() : async Principal {
-    //     msg.caller;
-    // };
-
-    public shared query (msg) func whoami() : async Text {
-        // get default identity
-        let principal : Text = Principal.toText(msg.caller);
-        return principal;
-    };
-
-
-    //Using DIP721 standard, adapted from https://github.com/SuddenlyHazel/DIP721/blob/main/src/DIP721/DIP721.mo
-
-    private stable var tokenPk : Nat = 0;
-
-    // nft name and symbol
-    stable var _name : Text = "TestCollection";
-    stable var _symbol : Text = "TST";
-
     // types
     // public type TokenAddress = Principal;
     // public type TokenId = Nat;
 
+    // whoami
+    public shared query (msg) func whoami() : async Text {
+        // get default identity
+        let principal_text : Text = Principal.toText(msg.caller);
+        return principal_text;
+    };
+
+    // Using DIP721 standard, adapted from https://github.com/SuddenlyHazel/DIP721/blob/main/src/DIP721/DIP721.mo
+
+    
+    // nft name and symbol
+    stable var _name : Text = "Fish";
+    stable var _symbol : Text = "🐟";
+
+    // number of tokens minted
+    private stable var tokenPk : Nat = 0;
+
+    // get num of tokens minted
+    public query func getNumTokensMinted() : async Nat {
+        return tokenPk;
+    };
+
+    // stable variables
     private stable var tokenURIEntries : [(T.TokenId, Text)] = [];
     private stable var ownersEntries : [(T.TokenId, Principal)] = [];
     private stable var balancesEntries : [(Principal, Nat)] = [];
     private stable var tokenApprovalsEntries : [(T.TokenId, Principal)] = [];
-    private stable var operatorApprovalsEntries : [(Principal, [Principal])] = [];  
+    private stable var operatorApprovalsEntries : [(Principal, [Principal])] = []; 
+
+    // –––
 
     private let tokenURIs : HashMap.HashMap<T.TokenId, Text> = HashMap.fromIter<T.TokenId, Text>(tokenURIEntries.vals(), 10, Nat.equal, Hash.hash);
+
+    // arg - tokenId, return owner principal
     private let owners : HashMap.HashMap<T.TokenId, Principal> = HashMap.fromIter<T.TokenId, Principal>(ownersEntries.vals(), 10, Nat.equal, Hash.hash);
+
     private let balances : HashMap.HashMap<Principal, Nat> = HashMap.fromIter<Principal, Nat>(balancesEntries.vals(), 10, Principal.equal, Principal.hash);
+
     private let tokenApprovals : HashMap.HashMap<T.TokenId, Principal> = HashMap.fromIter<T.TokenId, Principal>(tokenApprovalsEntries.vals(), 10, Nat.equal, Hash.hash);
+
     private let operatorApprovals : HashMap.HashMap<Principal, [Principal]> = HashMap.fromIter<Principal, [Principal]>(operatorApprovalsEntries.vals(), 10, Principal.equal, Principal.hash);
 
-    public shared func balanceOf(p : Principal) : async ?Nat {
-        return balances.get(p);
-    };
 
-    public shared func ownerOf(tokenId : T.TokenId) : async ?Principal {
-        return _ownerOf(tokenId);
-    };
-
-    public shared query func tokenURI(tokenId : T.TokenId) : async ?Text {
-        return _tokenURI(tokenId);
-    };
+    // query name and symbol
 
     public shared query func name() : async Text {
         return _name;
     };
-
     public shared query func symbol() : async Text {
         return _symbol;
     };
+
+    // query owner of token id. ex. dfx canister call nftminter ownerOf '(1)'
+    // public shared func ownerOf(tokenId : T.TokenId) : async ?Principal {
+    //     return _ownerOf(tokenId);
+    // };
+
+    public shared query func ownerOf(tokenId : T.TokenId) : async Text {
+        return switch (_ownerOf(tokenId)) {
+            case (null) "";
+            case (?principal) Principal.toText(principal);
+        };
+    };
+
+    // internal func
+    private func _ownerOf(tokenId : T.TokenId) : ?Principal {
+        return owners.get(tokenId);
+    };
+
+    // get link of token id 
+    public shared query func tokenURI(tokenId : T.TokenId) : async ?Text {
+        return _tokenURI(tokenId);
+    };
+
+
+    public shared func balanceOf(p : Principal) : async ?Nat {
+        return balances.get(p);
+    };
+    
 
     public shared func isApprovedForAll(owner : Principal, opperator : Principal) : async Bool {
         return _isApprovedForAll(owner, opperator);
@@ -146,10 +174,6 @@ actor Dip721Nft {
 
 
     // Internal
-
-    private func _ownerOf(tokenId : T.TokenId) : ?Principal {
-        return owners.get(tokenId);
-    };
 
     private func _tokenURI(tokenId : T.TokenId) : ?Text {
         return tokenURIs.get(tokenId);

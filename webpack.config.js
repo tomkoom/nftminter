@@ -75,7 +75,14 @@ module.exports = {
   module: {
     rules: [
       { test: /\.(ts|tsx|jsx)$/, loader: "ts-loader" },
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
+      //  Loading SVG
+      { test: /\.(svg)$/, use: [{ loader: 'file-loader' }] },
+      // Loading CSS modules
+      { test: /\.css$/, use: ["style-loader", { loader: "css-loader", options: { importLoaders: 1, modules: true } }], include: /\.module\.css$/ },
+      // Loading CSS
+      { test: /\.css$/, use: ["style-loader", "css-loader"], exclude: /\.module\.css$/ },
+      // file loader
+      { test: /\.(png|jpe?g|gif)$/i, use: [{ loader: 'file-loader' }] },
     ]
   },
   plugins: [
