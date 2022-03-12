@@ -16,3 +16,12 @@
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
+
+.disabled {
+	background: transparent;
+	background-clip: unset;
+	-webkit-background-clip: unset;
+	-webkit-text-fill-color: unset;
+	color: var(--coolGray40);
+	cursor: default;
+}

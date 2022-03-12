@@ -1,15 +1,12 @@
 import AssocList "mo:base/AssocList";
 import List "mo:base/List";
 
-// actor NFTMINTER {}
-
 actor {
 
   // whoami
   public shared query (msg) func whoami() : async Principal {
     msg.caller;
   };
-
 
   // –––
 

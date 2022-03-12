@@ -20,7 +20,7 @@ const Plug = ({
 	whoAmI,
 	setWhoAmI,
 }) => {
-	// idl
+	// idl, canisterId
 	const nftminterIdl = idlFactory;
 	const nftminterCanisterId = canisterId;
 
@@ -35,7 +35,6 @@ const Plug = ({
 				whitelist,
 				host,
 			});
-			// console.log(`The connected user's public key is:`, publicKey);
 			setIsConnected(await window.ic.plug.isConnected());
 		}
 
@@ -98,7 +97,7 @@ const Plug = ({
 	return (
 		<div className="section">
 			<button
-				className={!isConnected ? css.plug__btn : `${css.plug__btn} ${css.disabled}`}
+				className={isConnected ? `${css.plug__btn} ${css.disabled}` : css.plug__btn}
 				disabled={isConnected ? true : false}
 				onClick={() => connectToPlug()}
 			>
